@@ -1,0 +1,14 @@
+{
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "outDir": "./build",
+    "skipLibCheck": true,
+    "alwaysStrict": true,
+    "strict": true,
+    "declaration": true,
+    "lib": ["ES2022"],
+    "target": "ES2022",
+    "module": "commonjs",
+    "esModuleInterop": true
+  }
+}
