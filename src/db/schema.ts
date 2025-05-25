@@ -14,6 +14,7 @@ export const flotexSchema = pgSchema("flotex_schm");
 export const USER_TYPE = flotexSchema.enum("user_type", ["CUSTOMER", "ADMIN"]);
 export const ORDER_STATUS = flotexSchema.enum("order_status", ["RECEIVED", "IN_PROGRESS", "SHIPPING", "DELIVERED", "CANCELED"]);
 export const ENTITY_STATUS = flotexSchema.enum("entity_status", ["ACTIVE", "NOT_ACTIVE"]);
+export const SHIPPING_TYPE = flotexSchema.enum("shipping_type", ["SHIPPING", "INHOUSE"]);
 
 // Usuarios registrados
 export const users = flotexSchema.table("users", {
@@ -80,6 +81,7 @@ export const orders = flotexSchema.table("orders", {
   guestReference: varchar("guest_reference"),
   guestPhone: varchar("guest_phone"),
   guestEmail: varchar("guest_email"),
+  shippingType: SHIPPING_TYPE().default("SHIPPING"),
   detail: varchar("detail"),
   status: ORDER_STATUS().default("RECEIVED").notNull(),
   totalAmount: varchar("total_amount").notNull(),

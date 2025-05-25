@@ -16,7 +16,7 @@ export const selectOrder =
 
 export const insertOrder =
   async (order: Omit<CreateOrderRequestSchema, "products">) => {
-    const { totalAmount, address, addressId, city, country, detail, email, firstname, lastname, phone, reference } = order;
+    const { totalAmount, address, addressId, city, country, detail, email, firstname, lastname, phone, reference, shippingType } = order;
 
     return db.transaction(async (tx) => {
       try {
@@ -33,6 +33,7 @@ export const insertOrder =
             guestLastname: lastname,
             guestPhone: phone,
             guestReference: reference,
+            shippingType,
             detail,
           })
           .returning({ orderId: orders.id });

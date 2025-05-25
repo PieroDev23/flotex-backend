@@ -1,5 +1,5 @@
 {
-  "id": "b7a2c3d8-3abb-4155-a9a7-9d40a9929d34",
+  "id": "2a24d052-b603-4f12-86e6-c5654e42d3a4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -428,6 +428,14 @@
           "primaryKey": false,
           "notNull": false
         },
+        "shippingType": {
+          "name": "shippingType",
+          "type": "shipping_type",
+          "typeSchema": "flotex_schm",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'SHIPPING'"
+        },
         "detail": {
           "name": "detail",
           "type": "varchar",
@@ -688,6 +696,14 @@
         "SHIPPING",
         "DELIVERED",
         "CANCELED"
+      ]
+    },
+    "flotex_schm.shipping_type": {
+      "name": "shipping_type",
+      "schema": "flotex_schm",
+      "values": [
+        "SHIPPING",
+        "INHOUSE"
       ]
     },
     "flotex_schm.user_type": {

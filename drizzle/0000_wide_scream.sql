@@ -2,6 +2,7 @@ CREATE SCHEMA "flotex_schm";
 --> statement-breakpoint
 CREATE TYPE "flotex_schm"."entity_status" AS ENUM('ACTIVE', 'NOT_ACTIVE');--> statement-breakpoint
 CREATE TYPE "flotex_schm"."order_status" AS ENUM('RECEIVED', 'IN_PROGRESS', 'SHIPPING', 'DELIVERED', 'CANCELED');--> statement-breakpoint
+CREATE TYPE "flotex_schm"."shipping_type" AS ENUM('SHIPPING', 'INHOUSE');--> statement-breakpoint
 CREATE TYPE "flotex_schm"."user_type" AS ENUM('CUSTOMER', 'ADMIN');--> statement-breakpoint
 CREATE TABLE "flotex_schm"."addresses" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
@@ -61,6 +62,7 @@ CREATE TABLE "flotex_schm"."orders" (
 	"guest_reference" varchar,
 	"guest_phone" varchar,
 	"guest_email" varchar,
+	"shippingType" "flotex_schm"."shipping_type" DEFAULT 'SHIPPING',
 	"detail" varchar,
 	"status" "flotex_schm"."order_status" DEFAULT 'RECEIVED' NOT NULL,
 	"total_amount" varchar NOT NULL,

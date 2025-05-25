@@ -4,7 +4,6 @@ import { insertOrder, insertOrderItems } from "../repository";
 
 export default (async ({ request, response }) => {
   const { products, ...order } = createOrderRequestSchema.parse(request.body);
-
   const newOrder = await insertOrder(order);
 
   if (!newOrder) {

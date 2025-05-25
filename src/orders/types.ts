@@ -15,6 +15,7 @@ export const orderSchema = z.object({
   phone: z.coerce.string().optional(),
   email: z.string().email().optional(),
   detail: z.string().optional(),
+  shippingType: z.enum(["SHIPPING", "INHOUSE"]),
   status: z.enum(["RECEIVED", "IN_PROGRESS", "SHIPPING", "DELIVERED", "CANCELED"]).optional(),
   totalAmount: z.coerce.string()
 });

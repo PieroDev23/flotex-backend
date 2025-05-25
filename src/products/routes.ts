@@ -15,6 +15,6 @@ productsRouter.get("/list", listProducts);
 productsRouter.get("/:id", getProduct);
 productsRouter.post("/", authGuard, roleGuard("ADMIN"), createProduct);
 productsRouter.put("/", authGuard, roleGuard("ADMIN"), updateProduct);
-productsRouter.delete("/:id", authGuard, roleGuard("ADMIN"), deleteProduct)
+productsRouter.delete("/:id", authGuard, roleGuard("ADMIN"), deleteProduct);
 
 export default productsRouter;
