@@ -1,5 +1,4 @@
-import { and, eq, SQL } from "drizzle-orm";
-import { PgColumn } from "drizzle-orm/pg-core";
+import { and, asc, desc, eq, like, SQL } from "drizzle-orm";
 import db from "../db";
 import { products } from "../db/schema";
 import { CreateProductRequest, ListProductRequest, UpdateProductRequest } from "./types";
@@ -7,18 +6,30 @@ import { CreateProductRequest, ListProductRequest, UpdateProductRequest } from "
 export const selectProducts = async (filters: ListProductRequest) => {
   const conditions: SQL[] = [];
 
-  for (const [key, value] of Object.entries(filters)) {
-    const column = products[key as keyof typeof products];
-    conditions.push(eq(column as PgColumn, value));
+  if (filters.name) {
+    conditions.push(like(products.name, `%${filters.name}%`));
+  }
+  if (filters.id) {
+    conditions.push(eq(products.id, filters.id));
+  }
+  if (filters.categoryId) {
+    conditions.push(eq(products.categoryId, filters.categoryId));
+  }
+  if (filters.sku) {
+    conditions.push(eq(products.sku, filters.sku));
   }
 
-  return db
-    .select()
-    .from(products)
-    .where(and(...conditions));
-}
+  const baseQuery = db.select().from(products);
+  const whereClause = and(...conditions);
 
+  const query = filters.priceSort
+    ? baseQuery
+        .where(whereClause)
+        .orderBy(filters.priceSort === 'asc' ? asc(products.price) : desc(products.price))
+    : baseQuery.where(whereClause);
 
+  return query;
+};
 export const findProductById = async (productId: number) => {
   return db
     .select()

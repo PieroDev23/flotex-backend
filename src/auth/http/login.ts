@@ -6,6 +6,7 @@ import { comparePassword, createSessionCookie } from "../service";
 
 
 export default (async ({ request, response }) => {
+
   const { email, password } = loginUserRequestSchema.parse(request.body);
 
   const [userBd] = await findUserByEmail(email);
@@ -29,9 +30,6 @@ export default (async ({ request, response }) => {
   const { password: passwordBd, createdAt, updatedAt, ...rest } = userBd;
   createSessionCookie(rest, response);
 
-  response.body = {
-    code: "LoginSuccess",
-    user: rest,
-  };
+  response.body = rest;
 
 }) as Middleware

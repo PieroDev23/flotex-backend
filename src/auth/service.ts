@@ -16,6 +16,10 @@ export const createSessionCookie = (payload: Record<string, unknown>, response: 
   );
 }
 
+export const deleteSessionCookie = (response: BaseResponse) => {
+  response.set("Set-Cookie", "session=\"\"; Max-Age=0; Secure; SameSite=Strict; Path=/; HttpOnly");
+}
+
 export const comparePassword = (password: string, hashed: string) => {
   return bcrypt.compareSync(password, hashed);
 }

@@ -17,7 +17,7 @@ export const errorMiddleware: Middleware = async (ctx, next) => {
       ctx.response.body = body;
     } else {
 
-      console.log(e)
+      console.log(e);
 
       const body = {
         code: "UnknownError",

@@ -5,8 +5,8 @@ import { createUserRequestSchema } from "../types";
 
 export default (async ({ request, response }) => {
   const user = createUserRequestSchema.parse(request.body);
-
   const [userBd] = await findUserByEmail(user.email);
+
   if (userBd) {
     response.status = 401
     return response.body = {

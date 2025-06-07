@@ -9,6 +9,8 @@ import db from "./db";
 import { errorMiddleware } from "./error";
 import ordersRouter from "./orders/routes";
 import productsRouter from "./products/routes";
+import usersRouter from "./user/routes";
+import addressesRouter from "./address/routes";
 
 const koaApp = new koa();
 const koaRouter = new Router({ prefix: "/live" });
@@ -43,6 +45,8 @@ koaRouter.use(authRouter.routes());
 koaRouter.use(ordersRouter.routes());
 koaRouter.use(productsRouter.routes());
 koaRouter.use(categoriesRouter.routes());
+koaRouter.use(addressesRouter.routes());
+koaRouter.use(usersRouter.routes());
 
 koaApp.use(koaRouter.routes());
 

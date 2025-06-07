@@ -14,35 +14,62 @@ export const selectOrder =
       .where(eq(orders.id, orderId));
   }
 
-export const insertOrder =
-  async (order: Omit<CreateOrderRequestSchema, "products">) => {
-    const { totalAmount, address, addressId, city, country, detail, email, firstname, lastname, phone, reference, shippingType } = order;
+export const insertOrder = async (
+  order: Omit<CreateOrderRequestSchema, "products">
+) => {
+  const {
+    totalAmount,
+    address,
+    addressId,
+    city,
+    country,
+    detail,
+    email,
+    userId,
+    firstname,
+    lastname,
+    phone,
+    reference,
+    shippingType,
+  } = order;
 
-    return db.transaction(async (tx) => {
-      try {
-        return await tx
-          .insert(orders)
-          .values({
-            totalAmount,
-            addressId,
-            guestCity: city,
-            guestCountry: country,
-            guestAddress: address,
-            guestEmail: email,
-            guestFirstname: firstname,
-            guestLastname: lastname,
-            guestPhone: phone,
-            guestReference: reference,
-            shippingType,
-            detail,
-          })
-          .returning({ orderId: orders.id });
-      } catch {
-        tx.rollback();
-        return null
-      }
-    })
-  }
+  return db.transaction(async (tx) => {
+    try {
+      const baseValues = {
+        totalAmount,
+        addressId,
+        userId,
+        shippingType,
+        detail,
+      };
+
+      const guestValues = addressId
+        ? {}
+        : {
+          guestCity: city,
+          guestCountry: country,
+          guestAddress: address,
+          guestEmail: email,
+          guestFirstname: firstname,
+          guestLastname: lastname,
+          guestPhone: phone,
+          guestReference: reference,
+        };
+
+      return await tx
+        .insert(orders)
+        .values({
+          ...baseValues,
+          ...guestValues,
+        })
+        .returning({ orderId: orders.id });
+
+    } catch {
+      tx.rollback();
+      return null;
+    }
+  });
+};
 
 export const insertOrderItems =
   async (products: CreateOrderRequestSchema['products'], orderId: string) => {

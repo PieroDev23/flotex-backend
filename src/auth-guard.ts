@@ -6,34 +6,31 @@ import jwt from "./jwt";
 export default (async (ctx, next) => {
   const { request, response, ...rest } = ctx;
   const data = request.headers.cookie?.split("session=");
+
+  // consolea la ruta
   try {
     if (!data) {
-      response.status = 401
+      response.status = 403
       return response.body = {
-        code: "Unauthorized",
-        message: "bad auth"
-      }
+        user: null
+      };
     }
-
     const [, token] = data;
     const payload = jwt.verify(token);
-
     if (typeof payload === "string") {
-      response.status = 401
+      response.status = 403
       return response.body = {
-        code: "Unauthorized",
-        message: "bad auth"
+        user: null
       }
     }
-
     rest.state.user = payload;
-
-    next();
-  } catch {
-    response.status = 401;
+    await next();
+  } catch (error) {
+    console.log("ruta", ctx.request.url);
+    console.log(JSON.stringify(error))
+    response.status = 403;
     response.body = {
-      code: "Unauthorized",
-      message: "bad auth"
+      user: null
     }
   }
 }) as Middleware

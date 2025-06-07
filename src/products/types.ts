@@ -27,6 +27,7 @@ export const listProductsRequestSchema = z.object({
   categoryId: z.string(),
   createdAt: z.string().date(),
   sku: z.string(),
+  priceSort: z.enum(["asc", "desc"])
 }).partial();
 export type ListProductRequest = z.infer<typeof listProductsRequestSchema>;
 
