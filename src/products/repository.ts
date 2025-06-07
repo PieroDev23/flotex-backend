@@ -1,11 +1,26 @@
-import { and, asc, desc, eq, like, SQL } from "drizzle-orm";
+import { and, asc, desc, eq, like, or, SQL } from "drizzle-orm";
 import db from "../db";
 import { products } from "../db/schema";
 import { CreateProductRequest, ListProductRequest, UpdateProductRequest } from "./types";
 
 export const selectProducts = async (filters: ListProductRequest) => {
+  if (!filters || Object.keys(filters).length === 0) {
+    return db.select().from(products);
+  }
+
   const conditions: SQL[] = [];
 
+  // Compound search for name/sku fields
+  if (filters.search) {
+    conditions.push(
+      or(
+        like(products.name, `%${filters.search}%`),
+        like(products.sku, `%${filters.search}%`)
+      )!
+    );
+  }
+
+  // Individual field filters for backward compatibility
   if (filters.name) {
     conditions.push(like(products.name, `%${filters.name}%`));
   }

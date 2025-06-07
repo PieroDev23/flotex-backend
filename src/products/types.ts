@@ -22,6 +22,7 @@ export const productSchema = z.object({
 export type Product = z.infer<typeof productSchema>;
 
 export const listProductsRequestSchema = z.object({
+  search: z.string().optional(),
   name: z.string(),
   id: z.number(),
   categoryId: z.string(),
@@ -33,6 +34,18 @@ export type ListProductRequest = z.infer<typeof listProductsRequestSchema>;
 
 export const createProductRequestSchema = createInsertSchema(products);
 export type CreateProductRequest = z.infer<typeof createProductRequestSchema>;
+
+// Schema for multipart form data (without image URL, as it will be generated)
+export const createProductFormSchema = z.object({
+  name: z.string().min(1, "Product name is required"),
+  description: z.string().min(1, "Product description is required"),
+  price: z.coerce.number().int().positive("Price must be a positive integer"),
+  sku: z.string().min(1, "SKU is required"),
+  stock: z.coerce.number().int().min(0, "Stock must be non-negative"),
+  categoryId: z.string().min(1, "Category ID is required"),
+  discount: z.coerce.number().int().min(0).max(100).nullable().optional(),
+});
+export type CreateProductFormData = z.infer<typeof createProductFormSchema>;
 
 export const updateProductRequestSchema = z.object({
   productId: z.number(),

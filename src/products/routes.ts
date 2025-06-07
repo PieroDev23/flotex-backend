@@ -8,13 +8,16 @@ import getProduct from "./http/get";
 
 import roleGuard from "../role-guard";
 import authGuard from "../auth-guard";
+import { uploadSingle } from "../middleware/upload";
 
 const productsRouter = new Router({ prefix: "/products" });
 
 productsRouter.get("/list", listProducts);
 productsRouter.get("/:id", getProduct);
-productsRouter.post("/", authGuard, roleGuard("ADMIN"), createProduct);
-productsRouter.put("/", authGuard, roleGuard("ADMIN"), updateProduct);
+// Create endpoint (multipart/form-data with required image)
+productsRouter.post("/", authGuard, roleGuard("ADMIN"), uploadSingle, createProduct);
+// Update endpoint (multipart/form-data with optional image)
+productsRouter.put("/", authGuard, roleGuard("ADMIN"), uploadSingle, updateProduct);
 productsRouter.delete("/:id", authGuard, roleGuard("ADMIN"), deleteProduct);
 
 export default productsRouter;

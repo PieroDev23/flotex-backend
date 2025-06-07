@@ -1,0 +1,54 @@
+import { CreateProductRequest, ListProductRequest, UpdateProductRequest } from "./types";
+export declare const selectProducts: (filters: ListProductRequest) => Promise<{
+    id: number;
+    name: string;
+    imageUrl: string | null;
+    description: string;
+    price: number;
+    sku: string;
+    stock: number;
+    categoryId: string;
+    discount: number | null;
+    createdAt: Date;
+    updatedAt: Date;
+}[]>;
+export declare const findProductById: (productId: number) => Promise<{
+    id: number;
+    name: string;
+    imageUrl: string | null;
+    description: string;
+    price: number;
+    sku: string;
+    stock: number;
+    categoryId: string;
+    discount: number | null;
+    createdAt: Date;
+    updatedAt: Date;
+}[]>;
+export declare const insertProduct: (product: CreateProductRequest) => Promise<{
+    id: number;
+    name: string;
+    createdAt: Date;
+    updatedAt: Date;
+    imageUrl: string | null;
+    description: string;
+    price: number;
+    sku: string;
+    stock: number;
+    categoryId: string;
+    discount: number | null;
+}[]>;
+export declare const updateProduct: ({ fields, productId }: UpdateProductRequest) => Promise<{
+    id: number;
+    name: string;
+    imageUrl: string | null;
+    description: string;
+    price: number;
+    sku: string;
+    stock: number;
+    categoryId: string;
+    discount: number | null;
+    createdAt: Date;
+    updatedAt: Date;
+}[]>;
+export declare const deleteProduct: (productId: number) => Promise<import("pg").QueryResult<never>>;

@@ -15,10 +15,31 @@ import addressesRouter from "./address/routes";
 const koaApp = new koa();
 const koaRouter = new Router({ prefix: "/live" });
 
-// Middlewares
-koaApp.use(bodyParser());
-koaApp.use(morgan("dev"));
+// Middlewares - Error middleware MUST be first to catch all errors
 koaApp.use(errorMiddleware);
+
+// Logging middleware
+koaApp.use(morgan("dev"));
+
+// Conditional bodyParser - Skip bodyParser for multipart/form-data
+koaApp.use(async (ctx, next) => {
+  const contentType = ctx.request.headers['content-type'] || '';
+
+  // Debug: Log all headers for products routes
+  if (ctx.request.url.includes('/products') && ctx.request.method === "PUT") {
+    console.log(`📋 Content-Type: "${contentType}"`);
+  }
+
+  // Skip bodyParser for multipart/form-data to avoid conflicts with multer
+  const isMultipart = contentType.includes('multipart/form-data') ||
+    contentType.includes('multipart') ||
+    ctx.request.headers['content-type']?.toLowerCase().includes('multipart');
+  if (isMultipart) {
+    await next();
+  } else {
+    await bodyParser()(ctx, next);
+  }
+});
 
 // Routes
 koaRouter.get("/health", async (ctx) => {
